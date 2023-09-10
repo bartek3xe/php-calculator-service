@@ -10,7 +10,7 @@ class Calculator
     {
         $operatorFunction = self::getOperatorFunction($operator);
 
-        if ($operatorFunction === null) {
+        if (!in_array($operator, OperatorType::VALID_OPERATORS) || $operatorFunction === null) {
             throw new \InvalidArgumentException('Invalid operator');
         }
 
