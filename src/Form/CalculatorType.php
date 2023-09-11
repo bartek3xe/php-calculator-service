@@ -15,8 +15,12 @@ class CalculatorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstNumber', NumberType::class)
-            ->add('secondNumber', NumberType::class)
+            ->add('firstNumber', NumberType::class, [
+                'html5' => true,
+            ])
+            ->add('secondNumber', NumberType::class, [
+                'html5' => true,
+            ])
             ->add('operator', ChoiceType::class, [
                 'choices' => OperatorType::VALID_OPERATORS,
             ])
