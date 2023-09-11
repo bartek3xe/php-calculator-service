@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CalculatorController extends AbstractController
 {
-    #[Route(path: '/calculator', name: 'calculator')]
+    #[Route(path: '/', name: 'calculator')]
     public function calculator(Request $request): Response
     {
         $form = $this->createForm(CalculatorType::class);
