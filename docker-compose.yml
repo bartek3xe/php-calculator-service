@@ -1,5 +1,9 @@
-version: '3'
+version: '3.8'
 services:
+  php:
+    image: php:8.2.10-fpm
+    volumes:
+      - .:/var/www/html
   web:
     build:
       context: ./docker
