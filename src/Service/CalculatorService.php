@@ -5,13 +5,13 @@ namespace App\Service;
 use App\DBAL\Type\OperatorType;
 use Psr\Log\LoggerInterface;
 
-readonly class Calculator
+readonly class CalculatorService
 {
     public function __construct(private LoggerInterface $logger)
     {
     }
 
-    public function calculate(string $operator, $operand1, $operand2): ?int
+    public function calculate(string $operator, int $operand1, int $operand2): ?int
     {
         $this->logger->info('Called the calculate method', [
             'operator' => $operator,
