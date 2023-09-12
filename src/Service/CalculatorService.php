@@ -5,7 +5,7 @@ namespace App\Service;
 use App\DBAL\Type\OperatorType;
 use Psr\Log\LoggerInterface;
 
-readonly class Calculator
+readonly class CalculatorService
 {
     public function __construct(private LoggerInterface $logger)
     {
