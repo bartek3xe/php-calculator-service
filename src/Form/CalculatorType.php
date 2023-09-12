@@ -16,10 +16,12 @@ class CalculatorType extends AbstractType
     {
         $builder
             ->add('firstNumber', NumberType::class, [
-                'html5' => true,
+                'html5'    => true,
+                'required' => true
             ])
             ->add('secondNumber', NumberType::class, [
-                'html5' => true,
+                'html5'    => true,
+                'required' => true
             ])
             ->add('operator', ChoiceType::class, [
                 'choices' => OperatorType::VALID_OPERATORS,
