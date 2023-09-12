@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\DBAL\Type\OperatorType;
 use App\Form\CalculatorType;
 use App\Service\Calculator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +11,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CalculatorController extends AbstractController
 {
+    public function __construct(private readonly Calculator $calculator)
+    {
+    }
+
     #[Route(path: '/', name: 'calculator')]
     public function calculator(Request $request): Response
     {
@@ -23,7 +26,7 @@ class CalculatorController extends AbstractController
             $firstNumber  = $form->getData()['firstNumber'];
             $secondNumber = $form->getData()['secondNumber'];
 
-            $result = Calculator::calculate($operator, $firstNumber, $secondNumber);
+            $result = $this->calculator->calculate($operator, $firstNumber, $secondNumber);
         }
 
         return $this->render('calculator/index.html.twig', [
