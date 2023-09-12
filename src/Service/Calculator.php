@@ -11,7 +11,7 @@ readonly class Calculator
     {
     }
 
-    public function calculate(string $operator, $operand1, $operand2): int
+    public function calculate(string $operator, $operand1, $operand2): ?int
     {
         $this->logger->info('Called the calculate method', [
             'operator' => $operator,
@@ -24,7 +24,8 @@ readonly class Calculator
         if (!in_array($operator, OperatorType::VALID_OPERATORS) || $operatorFunction === null) {
             $errorMessage = 'Invalid operator ' . $operator;
             $this->logger->error($errorMessage);
-            throw new \InvalidArgumentException($errorMessage);
+
+            return null;
         }
 
         return $operatorFunction($operand1, $operand2);
@@ -43,7 +44,7 @@ readonly class Calculator
                     return $a / $b;
                 }
 
-                throw new \Error('Division by zero is not allowed.');
+                return null;
             },
         ];
 
