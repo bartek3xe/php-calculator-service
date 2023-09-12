@@ -3,22 +3,37 @@
 namespace App\Service;
 
 use App\DBAL\Type\OperatorType;
+use Psr\Log\LoggerInterface;
 
-class Calculator
+readonly class Calculator
 {
-    public static function calculate(string $operator, $operand1, $operand2): int
+    public function __construct(private LoggerInterface $logger)
     {
+    }
+
+    public function calculate(string $operator, $operand1, $operand2): int
+    {
+        $this->logger->info('Called the calculate method', [
+            'operator' => $operator,
+            'operand1' => $operand1,
+            'operand2' => $operand2,
+        ]);
+
         $operatorFunction = self::getOperatorFunction($operator);
 
         if (!in_array($operator, OperatorType::VALID_OPERATORS) || $operatorFunction === null) {
-            throw new \InvalidArgumentException('Invalid operator');
+            $errorMessage = 'Invalid operator ' . $operator;
+            $this->logger->error($errorMessage);
+            throw new \InvalidArgumentException($errorMessage);
         }
 
         return $operatorFunction($operand1, $operand2);
     }
 
-    public static function getOperatorFunction(string $operator): ?callable
+    public function getOperatorFunction(string $operator): ?callable
     {
+        $this->logger->info('Getting operator function for operator: ' . $operator);
+
         $operators = [
             OperatorType::PLUS_OPERATOR     => function($a, $b) { return $a + $b; },
             OperatorType::MINUS_OPERATOR    => function($a, $b) { return $a - $b; },
