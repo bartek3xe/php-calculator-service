@@ -1,7 +1,5 @@
 # Calculator Service
 
-# Calculator Service
-
 This project serves as a basic calculator service, allowing you to perform addition (+), subtraction (-), multiplication (*), and division (/) operations.
 
 ## Getting Started
