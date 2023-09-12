@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{{ form_start(form, { 'attr': {'class': 'form'} }) }}
+
+<div class="calculator-container">
+    <div class="calculator-container__box">
+        {{ form_label(form.firstNumber) }}
+        {{ form_widget(form.firstNumber, { 'attr': {'class': 'number'} }) }}
+    </div>
+    <div class="calculator-container__box">
+        {{ form_label(form.operator) }}
+        {{ form_widget(form.operator, { 'attr': {'class': 'number'} }) }}
+    </div>
+    <div class="calculator-container__box">
+        {{ form_label(form.secondNumber) }}
+        {{ form_widget(form.secondNumber, { 'attr': {'class': 'operator'} }) }}
+    </div>
+</div>
+<div class="calculator-container">
+    <div class="calculator-container__box">
+        {{ form_widget(form.submit) }}
+    </div>
+    <div>Result: {{ result }}</div>
+</div>
+
+{{ form_end(form) }}
+{% endblock %}
