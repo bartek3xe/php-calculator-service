@@ -2,36 +2,43 @@
 
 namespace Service;
 
+use App\DBAL\Type\OperatorType;
 use App\Service\CalculatorService;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 class CalculatorServiceTest extends TestCase
 {
-    public function testCalculateWithValidOperator()
+    private CalculatorService $calculatorService;
+
+    protected function setUp(): void
     {
-        $logger            = $this->createMock(LoggerInterface::class);
-        $calculatorService = new CalculatorService($logger);
+        $logger = $this->createMock(LoggerInterface::class);
+        $this->calculatorService = new CalculatorService($logger);
+    }
 
-        $result = $calculatorService->calculate('+', 3, 4);
-        $this->assertEquals(7, $result);
+    public function validOperatorDataProvider(): array
+    {
+        return [
+            [OperatorType::PLUS_OPERATOR, 3, 4, 7],
+            [OperatorType::MINUS_OPERATOR, 10, 5, 5],
+            [OperatorType::MULTIPLY_OPERATOR, 6, 7, 42],
+            [OperatorType::DIVIDE_OPERATOR, 20, 4, 5],
+        ];
+    }
 
-        $result = $calculatorService->calculate('-', 10, 5);
-        $this->assertEquals(5, $result);
-
-        $result = $calculatorService->calculate('*', 6, 7);
-        $this->assertEquals(42, $result);
-
-        $result = $calculatorService->calculate('/', 20, 4);
-        $this->assertEquals(5, $result);
+    /**
+     * @dataProvider validOperatorDataProvider
+     */
+    public function testCalculateWithValidOperator($operator, $firstNumber, $secondNumber, $expectedResult)
+    {
+        $result = $this->calculatorService->calculate($operator, $firstNumber, $secondNumber);
+        $this->assertEquals($expectedResult, $result);
     }
 
     public function testCalculateWithInvalidOperator()
     {
-        $logger            = $this->createMock(LoggerInterface::class);
-        $calculatorService = new CalculatorService($logger);
-
-        $result = $calculatorService->calculate('%', 5, 2);
+        $result = $this->calculatorService->calculate('%', 5, 2);
         $this->assertNull($result);
     }
 }
