@@ -13,7 +13,9 @@ readonly class CalculatorService
 
     public function calculate(string $operator, int $firstNumber, int $secondNumber, &$message = ''): ?int
     {
-        $this->logger->info('Called the calculate method', [
+        $this->validateOperator($operator);
+
+        $this->logger->info('Called the calculate method properly', [
             'operator' => $operator,
             'operand1' => $firstNumber,
             'operand2' => $secondNumber,
