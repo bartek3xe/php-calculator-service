@@ -27,18 +27,27 @@ class CalculatorServiceTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider validOperatorDataProvider
-     */
-    public function testCalculateWithValidOperator($operator, $firstNumber, $secondNumber, $expectedResult)
+    public function testCalculateWithValidOperator(): void
     {
-        $result = $this->calculatorService->calculate($operator, $firstNumber, $secondNumber);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals(7, $this->calculatorService->calculate('+', 3, 4));
+        $this->assertEquals(5, $this->calculatorService->calculate('-', 10, 5));
+        $this->assertEquals(42, $this->calculatorService->calculate('*', 6, 7));
+        $this->assertEquals(5, $this->calculatorService->calculate('/', 20, 4));
     }
 
-    public function testCalculateWithInvalidOperator()
+    public function testCalculateWithInvalidOperator(): void
     {
-        $result = $this->calculatorService->calculate('%', 5, 2);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid operator: %');
+        $this->calculatorService->calculate('%', 5, 2);
+    }
+
+    public function testCalculateDivisionByZero(): void
+    {
+        $message = '';
+        $result  = $this->calculatorService->calculate('/', 10, 0, $message);
+
         $this->assertNull($result);
+        $this->assertEquals('Division by zero is not allowed', $message);
     }
 }
