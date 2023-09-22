@@ -22,22 +22,23 @@ class CalculatorController extends AbstractController
         $form = $this->createForm(CalculatorType::class);
         $form->handleRequest($request);
 
-        $formResult = $this->handleForm($form);
+        [$formResult, $message] = $this->handleForm($form);
 
         return $this->render('calculator/index.html.twig', [
-            'form'   => $form,
-            'result' => $formResult ?? ''
+            'form'    => $form,
+            'result'  => $formResult ?? '',
+            'message' => $message,
         ]);
     }
 
-    private function handleForm(FormInterface $form): ?int
+    private function handleForm(FormInterface $form): ?array
     {
         if ($form->isSubmitted() && $form->isValid()) {
             $operator     = $form->getData()['operator'];
             $firstNumber  = $form->getData()['firstNumber'];
             $secondNumber = $form->getData()['secondNumber'];
 
-            return $this->calculator->calculate($operator, $firstNumber, $secondNumber);
+            return [$this->calculator->calculate($operator, $firstNumber, $secondNumber, $message), $message];
         }
 
         return null;

@@ -11,43 +11,61 @@ readonly class CalculatorService
     {
     }
 
-    public function calculate(string $operator, int $operand1, int $operand2): ?int
+    public function calculate(string $operator, int $firstNumber, int $secondNumber, &$message = ''): ?int
     {
-        $this->logger->info('Called the calculate method', [
+        $this->validateOperator($operator);
+
+        $this->logger->info('Called the calculate method properly', [
             'operator' => $operator,
-            'operand1' => $operand1,
-            'operand2' => $operand2,
+            'operand1' => $firstNumber,
+            'operand2' => $secondNumber,
         ]);
 
-        $operatorFunction = self::getOperatorFunction($operator);
-
-        if (!in_array($operator, OperatorType::VALID_OPERATORS) || $operatorFunction === null) {
-            $errorMessage = 'Invalid operator ' . $operator;
-            $this->logger->error($errorMessage);
+        if ($operator === OperatorType::DIVIDE_OPERATOR && (!$firstNumber || !$secondNumber)) {
+            $message = 'Division by zero is not allowed';
+            $this->logger->info($message);
 
             return null;
         }
 
-        return $operatorFunction($operand1, $operand2);
+        return match ($operator) {
+            OperatorType::PLUS_OPERATOR     => $this->add($firstNumber, $secondNumber),
+            OperatorType::MINUS_OPERATOR    => $this->deduct($firstNumber, $secondNumber),
+            OperatorType::DIVIDE_OPERATOR   => $this->divide($firstNumber, $secondNumber),
+            OperatorType::MULTIPLY_OPERATOR => $this->multiply($firstNumber, $secondNumber),
+        };
     }
 
-    public function getOperatorFunction(string $operator): ?callable
+    private function add(int $firstNumber, int $secondNumber): int
     {
-        $this->logger->info('Getting operator function for operator: ' . $operator);
+        return $firstNumber + $secondNumber;
+    }
 
-        $operators = [
-            OperatorType::PLUS_OPERATOR     => function($a, $b) { return $a + $b; },
-            OperatorType::MINUS_OPERATOR    => function($a, $b) { return $a - $b; },
-            OperatorType::MULTIPLY_OPERATOR => function($a, $b) { return $a * $b; },
-            OperatorType::DIVIDE_OPERATOR   => function($a, $b) {
-                if ($b != 0) {
-                    return $a / $b;
-                }
+    private function deduct(int $firstNumber, int $secondNumber): int
+    {
+        return $firstNumber - $secondNumber;
+    }
 
-                return null;
-            },
-        ];
+    private function divide(int $firstNumber, int $secondNumber): int
+    {
+        return $firstNumber / $secondNumber;
+    }
 
-        return $operators[$operator] ?? null;
+    private function multiply(int $firstNumber, int $secondNumber): int
+    {
+        return $firstNumber * $secondNumber;
+    }
+
+    private function validateOperator(string $operator): void
+    {
+        if (!in_array($operator, [
+            OperatorType::PLUS_OPERATOR,
+            OperatorType::MINUS_OPERATOR,
+            OperatorType::DIVIDE_OPERATOR,
+            OperatorType::MULTIPLY_OPERATOR,
+        ])) {
+            $this->logger->info('Invalid operator ' . $operator);
+            throw new \InvalidArgumentException('Invalid operator: ' . $operator);
+        }
     }
 }
