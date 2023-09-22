@@ -21,7 +21,14 @@ readonly class CalculatorService
             'operand2' => $secondNumber,
         ]);
 
-        $result = match ($operator) {
+        if ($operator === OperatorType::DIVIDE_OPERATOR && (!$firstNumber || !$secondNumber)) {
+            $message = 'Division by zero is not allowed';
+            $this->logger->info($message);
+
+            return null;
+        }
+
+        return match ($operator) {
             OperatorType::PLUS_OPERATOR     => $this->add($firstNumber, $secondNumber),
             OperatorType::MINUS_OPERATOR    => $this->deduct($firstNumber, $secondNumber),
             OperatorType::DIVIDE_OPERATOR   => $this->divide($firstNumber, $secondNumber),
