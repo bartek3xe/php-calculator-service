@@ -34,31 +34,38 @@ readonly class CalculatorService
             OperatorType::DIVIDE_OPERATOR   => $this->divide($firstNumber, $secondNumber),
             OperatorType::MULTIPLY_OPERATOR => $this->multiply($firstNumber, $secondNumber),
         };
+    }
 
-        if (!$result) {
+    private function add(int $firstNumber, int $secondNumber): int
+    {
+        return $firstNumber + $secondNumber;
+    }
+
+    private function deduct(int $firstNumber, int $secondNumber): int
+    {
+        return $firstNumber - $secondNumber;
+    }
+
+    private function divide(int $firstNumber, int $secondNumber): int
+    {
+        return $firstNumber / $secondNumber;
+    }
+
+    private function multiply(int $firstNumber, int $secondNumber): int
+    {
+        return $firstNumber * $secondNumber;
+    }
+
+    private function validateOperator(string $operator): void
+    {
+        if (!in_array($operator, [
+            OperatorType::PLUS_OPERATOR,
+            OperatorType::MINUS_OPERATOR,
+            OperatorType::DIVIDE_OPERATOR,
+            OperatorType::MULTIPLY_OPERATOR,
+        ])) {
             $this->logger->info('Invalid operator ' . $operator);
+            throw new \InvalidArgumentException('Invalid operator: ' . $operator);
         }
-
-        return $result;
-    }
-
-    private function add(int $operand1, int $operand2): int
-    {
-        return $operand1 + $operand2;
-    }
-
-    private function deduct(int $operand1, int $operand2): int
-    {
-        return $operand1 - $operand2;
-    }
-
-    private function divide(int $operand1, int $operand2): int
-    {
-        return $operand1 / $operand2;
-    }
-
-    private function multiply(int $operand1, int $operand2): int
-    {
-        return $operand1 * $operand2;
     }
 }
