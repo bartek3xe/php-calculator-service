@@ -15,8 +15,8 @@ readonly class CalculatorService
     {
         $this->logger->info('Called the calculate method', [
             'operator' => $operator,
-            'operand1' => $operand1,
-            'operand2' => $operand2,
+            'operand1' => $firstNumber,
+            'operand2' => $secondNumber,
         ]);
 
         $operatorFunction = self::getOperatorFunction($operator);
