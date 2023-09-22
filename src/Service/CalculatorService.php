@@ -19,35 +19,38 @@ readonly class CalculatorService
             'operand2' => $secondNumber,
         ]);
 
-        $operatorFunction = self::getOperatorFunction($operator);
+        $result = match ($operator) {
+            OperatorType::PLUS_OPERATOR     => $this->add($firstNumber, $secondNumber),
+            OperatorType::MINUS_OPERATOR    => $this->deduct($firstNumber, $secondNumber),
+            OperatorType::DIVIDE_OPERATOR   => $this->divide($firstNumber, $secondNumber),
+            OperatorType::MULTIPLY_OPERATOR => $this->multiply($firstNumber, $secondNumber),
+            default => null,
+        };
 
-        if (!in_array($operator, OperatorType::VALID_OPERATORS) || $operatorFunction === null) {
-            $errorMessage = 'Invalid operator ' . $operator;
-            $this->logger->error($errorMessage);
-
-            return null;
+        if (!$result) {
+            $this->logger->info('Invalid operator ' . $operator);
         }
 
-        return $operatorFunction($operand1, $operand2);
+        return $result;
     }
 
-    public function getOperatorFunction(string $operator): ?callable
+    private function add(int $operand1, int $operand2): int
     {
-        $this->logger->info('Getting operator function for operator: ' . $operator);
+        return $operand1 + $operand2;
+    }
 
-        $operators = [
-            OperatorType::PLUS_OPERATOR     => function($a, $b) { return $a + $b; },
-            OperatorType::MINUS_OPERATOR    => function($a, $b) { return $a - $b; },
-            OperatorType::MULTIPLY_OPERATOR => function($a, $b) { return $a * $b; },
-            OperatorType::DIVIDE_OPERATOR   => function($a, $b) {
-                if ($b != 0) {
-                    return $a / $b;
-                }
+    private function deduct(int $operand1, int $operand2): int
+    {
+        return $operand1 - $operand2;
+    }
 
-                return null;
-            },
-        ];
+    private function divide(int $operand1, int $operand2): int
+    {
+        return $operand1 / $operand2;
+    }
 
-        return $operators[$operator] ?? null;
+    private function multiply(int $operand1, int $operand2): int
+    {
+        return $operand1 * $operand2;
     }
 }
