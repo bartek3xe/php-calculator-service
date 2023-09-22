@@ -33,7 +33,6 @@ readonly class CalculatorService
             OperatorType::MINUS_OPERATOR    => $this->deduct($firstNumber, $secondNumber),
             OperatorType::DIVIDE_OPERATOR   => $this->divide($firstNumber, $secondNumber),
             OperatorType::MULTIPLY_OPERATOR => $this->multiply($firstNumber, $secondNumber),
-            default => null,
         };
 
         if (!$result) {
