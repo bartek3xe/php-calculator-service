@@ -17,11 +17,16 @@
         {{ form_widget(form.secondNumber, { 'attr': {'class': 'operator'} }) }}
     </div>
 </div>
-<div class="calculator-container">
-    <div class="calculator-container__box">
+<div class="calculator-container calculator-container__box">
+    <div>
         {{ form_widget(form.submit) }}
     </div>
-    <div class="result">Result: {{ result }}</div>
+    <div class="calculator-container__box">
+        <div class="result">Result: {{ result }}</div>
+        {% if message %}
+            <div class="result">Message: {{ message }}</div>
+        {% endif %}
+    </div>
 </div>
 
 {{ form_end(form) }}
